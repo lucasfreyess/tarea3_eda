@@ -22,7 +22,8 @@ namespace trees
 			ABBNode* root;
 
 		public:
-			void insert_postfix(std::vector <std::string> &vector_postfix);
+			void insertNode(ABBNode* node);
+			ABBNode* insert_postfix(std::vector <std::string> &vector_postfix);
 			void insert_rec(std::string val, ABBNode* node);
 			void insert(std::string val);
 
@@ -45,6 +46,8 @@ namespace trees
 
 			ABBNode* k_element_rec(int k, ABBNode* node);
 			ABBNode* k_element(int k);
+
+			void clearAll();
 
 			ABB();
 			virtual ~ABB();

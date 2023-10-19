@@ -7,6 +7,7 @@
 
 #include "trees/abb.hpp"
 #include <iostream>
+#include <stack>
 
 namespace trees 
 {
@@ -30,80 +31,73 @@ namespace trees
 		// TODO Auto-generated constructor stub
 	}
 
-	void ABB::insert_postfix(std::vector <std::string> &vector_postfix)
+	void ABB::insertNode(ABBNode* node)
 	{
-		/*
+		root = node;
+	}
+
+	ABBNode* ABB::insert_postfix(std::vector <std::string> &vector_postfix)
+	{
+		std::stack <ABBNode*> stack;    // hubiera hecho otra clase de stack pero con data ABBNode* pero me dio demasiada lata !
+
 		for (int i = 0; i < vector_postfix.size(); i++)
 		{
-			lLists::Stack stack;
-
-			if (vector_postfix[i] != "+" || vector_postfix[i] != "-" || vector_postfix[i] != "*" || vector_postfix[i] != "/" || vector_postfix[i] != "^" )
+			if (vector_postfix[i] == "+" || vector_postfix[i] == "-" || vector_postfix[i] == "*" || vector_postfix[i] == "/" || vector_postfix[i] == "^" )
 			{
-				stack.push(vector_postfix[i]);  // se guarda variable en stack
+				ABBNode* right_node = stack.top();
+				stack.pop();
+
+				ABBNode* left_node = stack.top();
+				stack.pop();
+
+				ABBNode* new_node = new ABBNode(vector_postfix[i]);
+				new_node->setRight(right_node);
+				new_node->setLeft(left_node);
+				//std::cout << "new node " << new_node->getData() << " created.\n\tptrLeft: " << new_node->getLeft()->getData() << "\n\tptrRight: " << new_node->getRight()->getData() << "\n\n";
+
+				stack.push(new_node);
 			}
-			else {
-				root->setRight(stack.top()->getData());
-				
+			else   // entonces [i] no es un operador
+			{
+				stack.push(new ABBNode(vector_postfix[i]));
+				//std::cout << vector_postfix[i] << " pushed to stack\n\n";
 			}
 		}
-		*/
 
-		// empieza desde el caracter de mas a la derecha de la expresion postfija
-		//for (int i = vector_postfix.size(); i >= 0; i--)
-		//{
-		//	
-		//}
+		//std::cout << "top de stack: " << stack.top()->getData() << std::endl;
 
-		ABBNode* node = root;
-		node->setData(vector_postfix[vector_postfix.size() - 1]);    // caso edge !!!
-		vector_postfix.pop_back();
-
-		while (vector_postfix.empty() == false)
-		{
-			node->setRight(new ABBNode(vector_postfix[vector_postfix.size() - 1]));
-			vector_postfix.pop_back();
-
-			if (vector_postfix[vector_postfix.size() - 1] == "+")   // poner demas operadores
-			{
-				node->setLeft(new ABBNode(vector_postfix[vector_postfix.size() - 1]));
-				vector_postfix.pop_back();
-				node = node->getLeft();
-			}
-			else {  // si es que no es un operador, entonces va a la derecha de la derecha del root (pos right-right)
-
-			}
-		}
+		return stack.top();   // queda un puntero al root del nuevo arbol de expresion
 	}
 
 	void ABB::insert_rec(std::string val, ABBNode* node)
 	{
-		// lo siguiente esta mal btw!! 
-		if ( pemdas(val) < pemdas(node->getData()) ) // LEFT
+		if (val > node->getData()) // RIGHT
 		{
-			if (node->getLeft() == nullptr)
+			if (node->getRight() == nullptr)
 			{
-				node->setLeft(new ABBNode(val));
-				//std::cout<<val << " inserted on left" << std::endl;
+				node->setRight(new ABBNode(val));
+				std::cout << val << " inserted on left of " << node->getData() << std::endl;
 			}
 			else {
 				insert_rec(val, node->getLeft());
 			}
 		}
-		else { // RIGHT
+		else { // LEFT
 			
-			if (node->getRight() == nullptr)
+			if (node->getLeft() == nullptr)
 			{
-				node->setRight(new ABBNode(val));
-				//std::cout<<val << " inserted on right" << std::endl;
+				node->setLeft(new ABBNode(val));
+				std::cout << val << " inserted on right of " << node->getData() << std::endl;
 			}
 			else {
-				insert_rec(val, node->getRight());
+				insert_rec(val, node->getLeft());
 			}
 		}
 	}
 
 	void ABB::insert(std::string val)
 	{
+	
 		if (root == nullptr)
 		{
 			root = new ABBNode(val);
@@ -242,9 +236,14 @@ namespace trees
 		return k_element_rec(k, root);
 	}
 
-	ABB::~ABB() 
+	void ABB::clearAll()
 	{
 		delete root;
+	}
+
+	ABB::~ABB() 
+	{
+		clearAll();
 	}
 
 } /* namespace trees */

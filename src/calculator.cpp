@@ -4,6 +4,16 @@
 
 namespace calc
 {
+    //x + x * 2 + ans
+
+    void postorder(trees::ABBNode* root)
+    {
+        postorder(root->getLeft());
+        postorder(root->getRight());
+
+        std::cout << root->getData();
+    }
+
     int pemdas(std::string c)      
     {
         if (c == "^")
@@ -51,12 +61,32 @@ namespace calc
             {     
                 std::vector <std::string> vector_postfix = infixToPostfix(input);
                 
+                
                 std::cout << "\npostfix: ";
                 for (int i = 0; i < vector_postfix.size(); i++)
                 {
-                    std::cout << vector_postfix[i];
+                    if (i == vector_postfix.size() - 1)
+                    {
+                        std::cout << vector_postfix[i];
+                    }
+                    else {
+                        std::cout << vector_postfix[i] << ",";
+                    }
                 }
                 std::cout << "\n\n";
+
+                /*    
+                //for (int i = vector_postfix.size() - 1; i >= 0; i--)  // empieza desde el valor final de vector_postfix
+		        //{
+                //    std::string val = vector_postfix[i];
+                //    abbtree.insert(val);
+                //}
+                */
+
+                abbtree.clearAll();
+
+                trees::ABBNode* new_root = abbtree.insert_postfix(vector_postfix);
+                abbtree.insertNode(new_root);
             }
         }
     }
@@ -137,20 +167,24 @@ namespace calc
         while (!stack.isEmpty())
         {
             resultado += stack.top()->getData();
-            //std::cout << "stack: " << stack.top()->getData() << ", ";
             stack.pop();
         }
-        //std::cout << std::endl;
 
         std::vector <std::string> vector_resultado;
-
-        //std::cout << "resultado length: " << resultado.length() << std::endl;
 
         for (int i = 0; i < resultado.length(); i++)
         {   
             char char_final = resultado[resultado.length()];
 
             //std::cout << "[" << i << "]: " << resultado[i] << std::endl;
+
+            // NECESARIO: agregar condicion sobre: 
+            // para la siguiente expresion postfija: x,1,0,+,x,5,*,+
+            // es necesario agrupar el "x,1,0,+..." en "x,10,+...", ya que sino no hace sentido
+
+            // para ello, existen dos casos:  (el operador da lo mismo)
+            //  1.- el orden es "x,1,0,+...". 
+            //  2.- el orden es "1,0,x,+...". En este, es importante que se diga que i > 0
 
             if (resultado[i] == 'a' && resultado[i + 1] == 'n')
             {
@@ -164,13 +198,10 @@ namespace calc
             }
             else if ( (resultado[i - 1] == 'a' && resultado[i] == 'n') || (resultado[i - 1] == 'n' && resultado[i] == 's') )
             {
-
                 continue;
             }
 
             std::string aux_s(1, resultado[i]);
-
-            //std::cout << "AAAAAAAAA [" << i << "]: " << aux_s << std::endl;
 
             vector_resultado.push_back(aux_s);
         }

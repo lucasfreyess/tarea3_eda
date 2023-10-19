@@ -2,7 +2,6 @@
 #include "lLists/stack.hpp"
 #include <iostream>
 
-
 namespace calc
 {
     int pemdas(std::string c)      
@@ -20,7 +19,7 @@ namespace calc
             return -1;
     }
 
-    void Calculator::menu(std::map <std::string, int> &map_variables)
+    void Calculator::menu(trees::ABB &abbtree, std::map <std::string, int> &map_variables)
     {
         std::cout << "=======================\n";
         std::cout << "CALCULADORA INTERACTIVA\n";
@@ -37,30 +36,52 @@ namespace calc
             }
 
             //std::cout << "input: " << input << "\n";
-            std::cout << "input: " << std::endl;
-            for (int i = 0; i < input.length(); i++)
-            {
-                std::cout << "[" << i << "]: " << input[i] << std::endl;  
-            }
-            std::cout << std::endl;
+            //std::cout << "input: " << std::endl;
+            //for (int i = 0; i < input.length(); i++)
+            //{
+            //    std::cout << "[" << i << "]: " << input[i] << std::endl;  
+            //}
+            //std::cout << std::endl;
 
-            if (input.find("="))  // entonces probablemente se le esta asignando un valor a una variable (e.g., x = 6)
+            if (input.find("=") != std::string::npos)  // entonces probablemente se le esta asignando un valor a una variable (e.g., x = 6). 
             {
-                std::cout << "alo sans\n";
-                std::string aux_s(1, input[0]);
-                map_variables[aux_s] = input[input.length()];  // asumiendo que el ultimo caracter de input es un numero
+                assign_value(input, map_variables);
             }
             else  // entonces probablemente se ingreso una expresion, por lo que hay que calcular el resultado
             {     
                 std::vector <std::string> vector_postfix = infixToPostfix(input);
+                
+                std::cout << "\npostfix: ";
+                for (int i = 0; i < vector_postfix.size(); i++)
+                {
+                    std::cout << vector_postfix[i];
+                }
+                std::cout << "\n\n";
             }
-            //std::cout << "output: " << std::endl;
-            //for (int i = 0; i < vector_postfix.size(); i++)
-            //{
-            //    std::cout << "[" << i << "]: " << vector_postfix[i] << std::endl;
-            //}
-
         }
+    }
+
+    void Calculator::assign_value(std::string input, std::map <std::string, int> &map_variables)
+    {
+        std::string aux_s(1, input[0]);
+        std::string valor;
+
+        for (int j = input.find("=") + 2; j < input.length(); j++)    // asumiendo q existe un espacio entre '=' y el primer caracter del valor, input.find("=") + 2 es el primer caracter.
+        {
+            valor += input[j];
+        }
+
+        //if (valor > std::to_string(INT32_MAX))
+        //{
+        //    std::cout << "El valor ingresado es muy grande !! Intentalo de nuevo.\n\n";
+        //    return;
+        //}
+
+        std::cout << "variable: " << aux_s << std::endl;
+        std::cout << "valor: " << stoi(valor) << "\n";
+
+        map_variables[aux_s] = stoi(valor);
+        std::cout << "valor asignado: " << map_variables["x"] << "\n\n";
     }
 
     std::vector<std::string> Calculator::infixToPostfix(std::string s)
@@ -103,7 +124,7 @@ namespace calc
                 //std::cout << "aux_top: " << aux_top << std::endl;
                 std::string aux_s(1, c);    // constructor de string que permite especificar el tamano de c, y luego c, para convertirlo a string
                 
-                while (!stack.isEmpty() && pemdas(aux_s) <= pemdas( (stack.top()->getData()) ))
+                while (!stack.isEmpty() && pemdas(aux_s) <= pemdas(stack.top()->getData()) )
                 {
                     resultado += stack.top()->getData();
                     stack.pop();

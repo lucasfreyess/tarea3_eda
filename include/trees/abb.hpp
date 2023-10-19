@@ -11,6 +11,8 @@
 #define ABB_HPP_
 
 #include "trees/abbNode.hpp"
+#include "lLists/stack.hpp"
+#include <vector>
 
 namespace trees 
 {
@@ -20,6 +22,7 @@ namespace trees
 			ABBNode* root;
 
 		public:
+			void insert_postfix(std::vector <std::string> &vector_postfix);
 			void insert_rec(std::string val, ABBNode* node);
 			void insert(std::string val);
 

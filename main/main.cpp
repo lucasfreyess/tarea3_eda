@@ -5,20 +5,23 @@
 
 int main()
 {
+    trees::ABB abbtree;
     std::map <std::string, int> map_variables;
     std::map <std::string, int>::iterator iterador_map = map_variables.begin();
 
     calc::Calculator calculadora(0);
 
-    calculadora.menu(map_variables);
+    calculadora.menu(abbtree, map_variables);
 
-    std::cout << "me voy a matar:1!!\n";
+    std::cout << "en main: \n";
 
-    while (iterador_map != map_variables.end())
-    {
-        std::cout << "Llave: " << iterador_map->first << "\nValor: " << iterador_map->second << std::endl;
-        iterador_map++;
-    }
+    std::cout << "valor asignado: " << map_variables["x"] << "\n\n";
+
+    //while (iterador_map != map_variables.end())
+    //{
+    //    std::cout << "Llave: " << iterador_map->first << "\nValor: " << iterador_map->second << std::endl;
+    //   iterador_map++;
+    //}
 
     
     /*

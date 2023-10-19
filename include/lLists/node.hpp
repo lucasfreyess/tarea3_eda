@@ -19,8 +19,10 @@ namespace lLists
 		public:
 			void setData(std::string _data);
 			void setNext(Node* _next);
+
 			std::string getData();
 			Node* getNext();
+			
 			void print();
 
 			Node();

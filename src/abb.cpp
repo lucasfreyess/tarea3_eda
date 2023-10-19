@@ -10,7 +10,7 @@
 
 namespace trees 
 {
-	int pemdas(std::string c)      /// PROBLEMA: cuando haya q pasar "ans" como arg en c, va a caer pq c es char. SOLUCION: sobrecargar pemdas con una definicion de string
+	int pemdas(std::string c) 
     {
         if (c == "^")
             return 3;
@@ -30,8 +30,54 @@ namespace trees
 		// TODO Auto-generated constructor stub
 	}
 
+	void ABB::insert_postfix(std::vector <std::string> &vector_postfix)
+	{
+		/*
+		for (int i = 0; i < vector_postfix.size(); i++)
+		{
+			lLists::Stack stack;
+
+			if (vector_postfix[i] != "+" || vector_postfix[i] != "-" || vector_postfix[i] != "*" || vector_postfix[i] != "/" || vector_postfix[i] != "^" )
+			{
+				stack.push(vector_postfix[i]);  // se guarda variable en stack
+			}
+			else {
+				root->setRight(stack.top()->getData());
+				
+			}
+		}
+		*/
+
+		// empieza desde el caracter de mas a la derecha de la expresion postfija
+		//for (int i = vector_postfix.size(); i >= 0; i--)
+		//{
+		//	
+		//}
+
+		ABBNode* node = root;
+		node->setData(vector_postfix[vector_postfix.size() - 1]);    // caso edge !!!
+		vector_postfix.pop_back();
+
+		while (vector_postfix.empty() == false)
+		{
+			node->setRight(new ABBNode(vector_postfix[vector_postfix.size() - 1]));
+			vector_postfix.pop_back();
+
+			if (vector_postfix[vector_postfix.size() - 1] == "+")   // poner demas operadores
+			{
+				node->setLeft(new ABBNode(vector_postfix[vector_postfix.size() - 1]));
+				vector_postfix.pop_back();
+				node = node->getLeft();
+			}
+			else {  // si es que no es un operador, entonces va a la derecha de la derecha del root (pos right-right)
+
+			}
+		}
+	}
+
 	void ABB::insert_rec(std::string val, ABBNode* node)
 	{
+		// lo siguiente esta mal btw!! 
 		if ( pemdas(val) < pemdas(node->getData()) ) // LEFT
 		{
 			if (node->getLeft() == nullptr)

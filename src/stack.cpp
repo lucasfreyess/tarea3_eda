@@ -10,55 +10,54 @@
 
 namespace lLists
 {
-
-Stack::Stack():head(nullptr) 
-{
-	// TODO Auto-generated constructor stub
-}
-
-void Stack::push(std::string val)
-{
-	Node* node = new Node(val);
-	push(node);
-}
-
-void Stack::push(Node* node)
-{
-	node->setNext(head);
-	head = node;
-}
-
-void Stack::pop()
-{
-	if (!isEmpty())
+	Stack::Stack():head(nullptr) 
 	{
-		Node* ptr = head;
-		head = head->getNext();
-		delete ptr;
+		// TODO Auto-generated constructor stub
 	}
-}
 
-Node* Stack::top()
-{
-	return head;
-}
-
-bool Stack::isEmpty()
-{
-	return (head == nullptr);
-}
-
-void Stack::clear()
-{
-	while (!isEmpty())
+	void Stack::push(std::string val)
 	{
-		pop();
+		Node* node = new Node(val);
+		push(node);
 	}
-}
 
-Stack::~Stack() 
-{
-	clear();
-}
+	void Stack::push(Node* node)
+	{
+		node->setNext(head);
+		head = node;
+	}
 
-} /* namespace eda */
+	void Stack::pop()
+	{
+		if (!isEmpty())
+		{
+			Node* ptr = head;
+			head = head->getNext();
+			delete ptr;
+		}
+	}
+
+	Node* Stack::top()
+	{
+		return head;
+	}
+
+	bool Stack::isEmpty()
+	{
+		return (head == nullptr);
+	}
+
+	void Stack::clear()
+	{
+		while (!isEmpty())
+		{
+			pop();
+		}
+	}
+
+	Stack::~Stack() 
+	{
+		clear();
+	}
+
+} /* namespace lLists*/

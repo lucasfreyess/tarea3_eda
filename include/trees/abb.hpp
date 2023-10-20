@@ -52,5 +52,6 @@ namespace trees
 			ABB();
 			virtual ~ABB();
 	};
-} 
+} /* namespace trees */ 
+
 #endif /* ABB_HPP_ */

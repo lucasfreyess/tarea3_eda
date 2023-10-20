@@ -127,8 +127,9 @@ namespace trees
 	{
 		if (node != nullptr)
 		{
-			std::cout << std::string(level*2, '-');
-			std::cout << node->getData() << " | s = " << node->getSize() << std::endl;
+			std::cout << std::string(level*3, '-');
+			//std::cout << node->getData() << " | s = " << node->getSize() << std::endl;
+			std::cout << node->getData() << std::endl;
 
 			traverse_rec(node->getLeft(), level + 1);
 			traverse_rec(node->getRight(), level + 1);

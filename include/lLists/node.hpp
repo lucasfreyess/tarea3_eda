@@ -1,6 +1,7 @@
 /*
  * node.hpp
  *
+ * modificado para set-ear data como string
  */
 
 #ifndef NODE_HPP_
@@ -29,7 +30,6 @@ namespace lLists
 			Node(std::string _data, Node* next = nullptr);
 			virtual ~Node();
 	};
-
-} /* namespace eda */
+} /* namespace lLists */
 
 #endif /* NODE_HPP_ */

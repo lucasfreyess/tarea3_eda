@@ -39,5 +39,6 @@ namespace trees
 			ABBNode(std::string val);
 			virtual ~ABBNode();
 	};
-} 
+} /* namespace trees */ 
+
 #endif /* ABBNODE_H_ */

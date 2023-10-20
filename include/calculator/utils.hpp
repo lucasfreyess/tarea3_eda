@@ -1,8 +1,14 @@
+#ifndef _UTILS_HPP
+#define _UTILS_HPP
+
 #include <string>
+#include <cmath>
 
 namespace calc 
 {
-    typedef struct operacion
+    //struct de posibles operaciones para ahorrarse
+    //condiciones if en solvePostfix() de la clase calculator!!
+    typedef struct operacion  
     {
         std::string operador;
         int (*funcion) (int, int);
@@ -24,4 +30,7 @@ namespace calc
     int mult(int a, int b);
     int div(int a, int b);
     int potencia(int a, int b);
-}
+    
+} /* namespace calc */
+
+#endif // _UTILS_HPP

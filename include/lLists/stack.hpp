@@ -31,5 +31,6 @@ namespace lLists
 			Stack();
 			virtual ~Stack();
 	};
-} 
+} /* namespace lLists */
+
 #endif /* STACK_HPP_ */

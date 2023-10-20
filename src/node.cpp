@@ -7,39 +7,38 @@
 
 namespace lLists 
 {
+	Node::Node(): data(""), ptrNext(nullptr) 
+	{}
 
-Node::Node(): data(""), ptrNext(nullptr) 
-{}
+	Node::Node(std::string val, Node* next): data(val), ptrNext(next) 
+	{}
 
-Node::Node(std::string val, Node* next): data(val), ptrNext(next) 
-{}
+	void Node::setData(std::string _data)
+	{
+		data = _data;
+	}
 
-void Node::setData(std::string _data)
-{
-	data = _data;
-}
+	void Node::setNext(Node* next)
+	{
+		ptrNext = next;
+	}
 
-void Node::setNext(Node* next)
-{
-	ptrNext = next;
-}
+	std::string Node::getData()
+	{
+		return data;
+	}
 
-std::string Node::getData()
-{
-	return data;
-}
+	Node* Node::getNext()
+	{
+		return ptrNext;
+	}
 
-Node* Node::getNext()
-{
-	return ptrNext;
-}
+	void Node::print()
+	{
+		std::cout << data;
+	}
 
-void Node::print()
-{
-	std::cout << data;
-}
-
-Node::~Node() 
-{}
+	Node::~Node() 
+	{}
 
 } /* namespace eda */

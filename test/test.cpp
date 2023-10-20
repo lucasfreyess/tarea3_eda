@@ -3,7 +3,7 @@
 int main()
 {
     trees::ABB abbtree;
-    std::map <std::string, int> map_variables;
+    std::map <std::string, double> map_variables;
     
     calc::Calculator calculadora;
 

@@ -9,12 +9,12 @@ namespace calc
     class Calculator
     { 
         private:
-            void assign_value(std::string input, std::map <std::string, int> &map_variables);
+            void assignValue(std::string input, std::map <std::string, double> &map_variables);
             std::vector<std::string> infixToPostfix(std::string); // devuelve un vector compuesto de la expresion posfija.
-            std::string solvePostfix(std::vector <std::string> vector_postfix, std::map<std::string, int> &map_variables);
+            std::string solvePostfix(std::vector <std::string> vector_postfix, std::map<std::string, double> &map_variables);
 
         public:
-            void menu(trees::ABB &abbtree, std::map <std::string, int> &map_variables);
+            void menu(trees::ABB &abbtree, std::map <std::string, double> &map_variables);
             
             Calculator();
             ~Calculator();  

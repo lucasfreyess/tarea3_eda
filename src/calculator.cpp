@@ -5,7 +5,7 @@
 
 namespace calc
 {
-    void Calculator::menu(trees::ABB &abbtree, std::map <std::string, int> &map_variables)
+    void Calculator::menu(trees::ABB &abbtree, std::map <std::string, double> &map_variables)
     {
         std::cout << "=======================\n";
         std::cout << "CALCULADORA INTERACTIVA\n";
@@ -27,50 +27,38 @@ namespace calc
                 abbtree.traverse();
             }
 
-            else if (input.find("=") != std::string::npos)  // entonces probablemente se le esta asignando un valor a una variable (e.g., x = 6). 
+            else if (input.find("=") != std::string::npos)  // entonces se le esta asignando un valor a una variable (e.g., x = 6). 
             {
-                assign_value(input, map_variables);
+                assignValue(input, map_variables);
             }
             else  // entonces probablemente se ingreso una expresion, por lo que hay que hacer un arbol de esta, y calcular el resultado
             {     
                 std::vector <std::string> vector_postfix = infixToPostfix(input);
                 
-                //std::cout << "\npostfix: ";
-                //for (int i = 0; i < vector_postfix.size(); i++)
-                //{
-                //    if (i == vector_postfix.size() - 1)
-                //    {
-                //        std::cout << vector_postfix[i];
-                //    }
-                //    else {
-                //        std::cout << vector_postfix[i] << ",";
-                //    }
-                //}
-                //std::cout << "\n\n";
-
                 abbtree.clearAll();
 
-                trees::ABBNode* new_root = abbtree.insert_postfix(vector_postfix);
+                trees::ABBNode* new_root = abbtree.insertPostfix(vector_postfix);
                 abbtree.insertNode(new_root);
 
-                map_variables["ans"] = stoi(solvePostfix(vector_postfix, map_variables));
+                map_variables["ans"] = stod(solvePostfix(vector_postfix, map_variables));  // stod: string to double
                 std::cout << "ans = " << map_variables["ans"] << "\n";
             }
         }
     }
 
-    void Calculator::assign_value(std::string input, std::map <std::string, int> &map_variables)
+    void Calculator::assignValue(std::string input, std::map <std::string, double> &map_variables)
     {
         std::string aux_s(1, input[0]);
         std::string valor;
 
-        for (int j = input.find("=") + 2; j < input.length(); j++)    // asumiendo q existe un espacio entre '=' y el primer caracter del valor, input.find("=") + 2 es el primer caracter.
+        // asumiendo que existe un espacio entre '=' y el primer caracter
+        // del valor, input.find("=") + 2 es el primer caracter.
+        for (int j = input.find("=") + 2; j < input.length(); j++)    
         {
             valor += input[j];
         }
 
-        map_variables[aux_s] = stoi(valor);
-        //std::cout << "valor asignado: " << map_variables[aux_s] << "\n\n";
+        map_variables[aux_s] = stod(valor);   // stod: string-to-double
     }
 
     std::vector<std::string> Calculator::infixToPostfix(std::string s)
@@ -82,6 +70,7 @@ namespace calc
 
         std::string big_number;
 
+        // se convierte el string "s" en un vector (vector_input)
         for (int i = 0; i < s.length(); i++)
         {
             // si es que hay un 'ans' en el string, entonces se agrupa y se inserta en vector_input como un solo item
@@ -123,6 +112,7 @@ namespace calc
             }
         }
 
+        // lo siguiente es el proceso de infijo a postfijo
         for (int i = 0; i < vector_input.size(); i++)
         {
             std::string c = vector_input[i];
@@ -149,9 +139,9 @@ namespace calc
             {
                 continue;
             }
-            else   // ocurre cuando c es un operador
+            else                // ocurre cuando c es un operador
             {    
-                while (!stack.isEmpty() && pemdas(c) <= pemdas(stack.top()->getData()) )
+                while ( !stack.isEmpty() && pemdas(c) <= pemdas(stack.top()->getData()) )
                 {
                     vector_resultado.push_back(stack.top()->getData());
                     stack.pop();
@@ -170,7 +160,7 @@ namespace calc
         return vector_resultado;
     }
 
-    std::string Calculator::solvePostfix(std::vector <std::string> vector_postfix, std::map <std::string, int> &map_variables)
+    std::string Calculator::solvePostfix(std::vector <std::string> vector_postfix, std::map <std::string, double> &map_variables)
     {
         lLists::Stack stack;
 
@@ -184,8 +174,8 @@ namespace calc
         {
             if (isOperator(vector_postfix[i]))
             {
-                int valor_derecho = 0;
-                int valor_izquierdo = 0;
+                double valor_derecho = 0;
+                double valor_izquierdo = 0;
 
                 bool derecho_es_variable = false;
                 bool izquierdo_es_variable = false;
@@ -193,24 +183,18 @@ namespace calc
                 std::string operando_derecho = stack.top()->getData();
                 stack.pop();
 
-                //std::cout << "operando derecho: " << operando_derecho << "\n";
-
                 std::string operando_izquierdo = stack.top()->getData(); 
                 stack.pop();
-
-                //std::cout << "operando izquierdo: " << operando_izquierdo << "\n";
 
                 if (isVariable(operando_derecho))
                 {
                     valor_derecho = map_variables[operando_derecho];
                     derecho_es_variable = true;
-                    //std::cout << "valor derecho: " << valor_derecho << "\n";
                 }
                 if (isVariable(operando_izquierdo))
                 {
                     valor_izquierdo = map_variables[operando_izquierdo];
                     izquierdo_es_variable = true;
-                    //std::cout << "valor izquierdo: " << valor_izquierdo << "\n";
                 }
 
                 for (int j = 0; j < 5; j++)
@@ -220,12 +204,12 @@ namespace calc
 
                         if (izquierdo_es_variable && derecho_es_variable)
                         {
-                            int resultado = ff[j].funcion(valor_izquierdo, valor_derecho);
+                            double resultado = ff[j].funcion(valor_izquierdo, valor_derecho);
                             stack.push(std::to_string(resultado));
                         }
                         else if (!izquierdo_es_variable && derecho_es_variable)
                         {
-                            int resultado = ff[j].funcion(stoi(operando_izquierdo), valor_derecho);
+                            double resultado = ff[j].funcion(stod(operando_izquierdo), valor_derecho);
                             stack.push(std::to_string(resultado));
                         }
                         else if (izquierdo_es_variable && !derecho_es_variable)
@@ -233,12 +217,12 @@ namespace calc
                             //std::cout << "\nvalor_operando_izquierdo: " << valor_izquierdo << "\n"; 
                             //std::cout << "\nvalor_numero_derecho: " << stoi(operando_derecho) << "\n";
 
-                            int resultado = ff[j].funcion(valor_izquierdo, stoi(operando_derecho));
+                            double resultado = ff[j].funcion(valor_izquierdo, stod(operando_derecho));
                             stack.push(std::to_string(resultado));
                         }
                         else if (!izquierdo_es_variable && !derecho_es_variable)
                         {
-                            int resultado = ff[j].funcion(stoi(operando_izquierdo), stoi(operando_derecho));
+                            double resultado = ff[j].funcion(stod(operando_izquierdo), stod(operando_derecho));
                             stack.push(std::to_string(resultado));
                         }
 

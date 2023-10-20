@@ -23,7 +23,7 @@ namespace trees
 
 		public:
 			void insertNode(ABBNode* node);
-			ABBNode* insert_postfix(std::vector <std::string> &vector_postfix);
+			ABBNode* insertPostfix(std::vector <std::string> &vector_postfix);
 			void insert_rec(std::string val, ABBNode* node);
 			void insert(std::string val);
 

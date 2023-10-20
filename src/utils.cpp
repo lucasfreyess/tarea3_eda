@@ -47,27 +47,27 @@ namespace calc
             return -1;
     }
 
-    int suma(int a, int b)
+    double suma(double a, double b)
     {
         return a + b;
     }
     
-    int resta(int a, int b)
+    double resta(double a, double b)
     {
         return a - b;
     }
 
-    int mult(int a, int b)
+    double mult(double a, double b)
     {
         return a * b;
     }
 
-    int div(int a, int b)     // hay q ver division de float !!
+    double div(double a, double b)     // hay q ver division de float !!
     {
         return a / b;
     }
 
-    int potencia(int a, int b)
+    double potencia(double a, double b)
     {
         return pow(a, b);
     }

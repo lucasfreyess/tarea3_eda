@@ -6,6 +6,7 @@
  */
 
 #include "trees/abb.hpp"
+#include "calculator/utils.hpp"
 #include <iostream>
 #include <stack>
 
@@ -21,13 +22,14 @@ namespace trees
 		root = node;
 	}
 
-	ABBNode* ABB::insert_postfix(std::vector <std::string> &vector_postfix)
+	ABBNode* ABB::insertPostfix(std::vector <std::string> &vector_postfix)
 	{
 		std::stack <ABBNode*> stack;    // hubiera hecho otra clase de stack pero con data ABBNode* pero me dio demasiada lata !
+		
 
 		for (int i = 0; i < vector_postfix.size(); i++)
 		{
-			if (vector_postfix[i] == "+" || vector_postfix[i] == "-" || vector_postfix[i] == "*" || vector_postfix[i] == "/" || vector_postfix[i] == "^" )
+			if (calc::isOperator(vector_postfix[i]))
 			{
 				ABBNode* right_node = stack.top();
 				stack.pop();
@@ -42,16 +44,14 @@ namespace trees
 
 				stack.push(new_node);
 			}
-			else   // entonces [i] no es un operador
+			else   // entonces vector_postfix[i] no es un operador
 			{
 				stack.push(new ABBNode(vector_postfix[i]));
 				//std::cout << vector_postfix[i] << " pushed to stack\n\n";
 			}
 		}
 
-		//std::cout << "top de stack: " << stack.top()->getData() << std::endl;
-
-		return stack.top();   // queda un puntero al root del nuevo arbol de expresion
+		return stack.top();   // queda un puntero al root del nuevo arbol binario en el stack !
 	}
 
 	void ABB::insert_rec(std::string val, ABBNode* node)

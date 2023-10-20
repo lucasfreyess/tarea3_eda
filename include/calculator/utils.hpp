@@ -11,7 +11,7 @@ namespace calc
     typedef struct operacion  
     {
         std::string operador;
-        int (*funcion) (int, int);
+        double (*funcion) (double, double);
     } operacion;
 
     bool isOperator(char c);
@@ -25,11 +25,11 @@ namespace calc
 
     int pemdas(std::string c);
 
-    int suma(int a, int b);
-    int resta(int a, int b);
-    int mult(int a, int b);
-    int div(int a, int b);
-    int potencia(int a, int b);
+    double suma(double a, double b);
+    double resta(double a, double b);
+    double mult(double a, double b);
+    double div(double a, double b);
+    double potencia(double a, double b);
     
 } /* namespace calc */
 

@@ -1,34 +1,10 @@
 #include "calculator/calculator.hpp"
+#include "calculator/utils.hpp"
 #include "lLists/stack.hpp"
 #include <iostream>
 
 namespace calc
 {
-    //x + x * 2 + ans
-
-    void postorder(trees::ABBNode* root)
-    {
-        postorder(root->getLeft());
-        postorder(root->getRight());
-
-        std::cout << root->getData();
-    }
-
-    int pemdas(std::string c)      
-    {
-        if (c == "^")
-            return 3;
-
-        else if (c == "/" || c == "*")
-            return 2;
-
-        else if (c == "+" || c == "-")
-            return 1;
-
-        else   
-            return -1;
-    }
-
     void Calculator::menu(trees::ABB &abbtree, std::map <std::string, int> &map_variables)
     {
         std::cout << "=======================\n";
@@ -40,28 +16,26 @@ namespace calc
             std::string input;
             std::getline(std::cin, input);
 
-            if (input == "adios")
+            if (input == "FIN" || input == "fin" || input == "Fin")
             {
                 break;
             }
 
-            //std::cout << "input: " << input << "\n";
-            //std::cout << "input: " << std::endl;
-            //for (int i = 0; i < input.length(); i++)
-            //{
-            //    std::cout << "[" << i << "]: " << input[i] << std::endl;  
-            //}
-            //std::cout << std::endl;
+            else if (input == "tree")
+            {
+                abbtree.updateSize();
+                abbtree.traverse();
+            }
 
-            if (input.find("=") != std::string::npos)  // entonces probablemente se le esta asignando un valor a una variable (e.g., x = 6). 
+            else if (input.find("=") != std::string::npos)  // entonces probablemente se le esta asignando un valor a una variable (e.g., x = 6). 
             {
                 assign_value(input, map_variables);
             }
-            else  // entonces probablemente se ingreso una expresion, por lo que hay que calcular el resultado
+            else  // entonces probablemente se ingreso una expresion, por lo que hay que hacer un arbol de esta, y calcular el resultado
             {     
                 std::vector <std::string> vector_postfix = infixToPostfix(input);
                 
-                
+
                 std::cout << "\npostfix: ";
                 for (int i = 0; i < vector_postfix.size(); i++)
                 {
@@ -75,18 +49,13 @@ namespace calc
                 }
                 std::cout << "\n\n";
 
-                /*    
-                //for (int i = vector_postfix.size() - 1; i >= 0; i--)  // empieza desde el valor final de vector_postfix
-		        //{
-                //    std::string val = vector_postfix[i];
-                //    abbtree.insert(val);
-                //}
-                */
-
                 abbtree.clearAll();
 
                 trees::ABBNode* new_root = abbtree.insert_postfix(vector_postfix);
                 abbtree.insertNode(new_root);
+
+                map_variables["ans"] = stoi(solvePostfix(vector_postfix, map_variables));
+                std::cout << "ans = " << map_variables["ans"] << "\n\n";
             }
         }
     }
@@ -111,40 +80,97 @@ namespace calc
         std::cout << "valor: " << stoi(valor) << "\n";
 
         map_variables[aux_s] = stoi(valor);
-        std::cout << "valor asignado: " << map_variables["x"] << "\n\n";
+        std::cout << "valor asignado: " << map_variables[aux_s] << "\n\n";
     }
 
     std::vector<std::string> Calculator::infixToPostfix(std::string s)
     {
         lLists::Stack stack;
-        std::string resultado;
         
+        std::vector <std::string> vector_input;
+        std::vector <std::string> vector_resultado;
+
+        std::string big_number;
+
         for (int i = 0; i < s.length(); i++)
         {
-            char c = s[i];
-
-            //std::cout << "c: " << c << std::endl;
-
-            if ( (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') )
+            // si es que hay un 'ans' en el string, entonces se agrupa y se inserta en vector_input
+            if (s[i] == 'a' && s[i + 1] == 'n')
             {
-                resultado += c;
+                std::string aux_s;
+                aux_s += s[i];
+                aux_s += s[i + 1];
+                aux_s += s[i + 2];
+
+                vector_input.push_back(aux_s);
+                continue;
             }
-            else if (c == '(')
+            else if ( (s[i - 1] == 'a' && s[i] == 'n') || (s[i - 1] == 'n' && s[i] == 's') )
             {
-                std::string aux_s = "(";
-                stack.push(aux_s);
+                continue;
             }
-            else if (c == ')')
+
+            if (isNumber(s[i]))   
+            {
+                if (isNumber(s[i + 1]))   // es suficiente para poder distinguir un numero que posee mas de un digito
+                {
+                    // ademas, esto ocurre para todos los digitos, menos el ultimo
+                    big_number += s[i];
+                }
+
+                if (s[i + 1] == ' ' || (i == s.length() - 1))
+                {
+                    // esto ocurre para el ultimo digito de un numero con mas de un digito
+                    big_number += s[i];
+                    vector_input.push_back(big_number);
+
+                    big_number = "";
+                }
+            }
+            else {
+                std::string aux_s;
+                aux_s = s[i];
+                vector_input.push_back(aux_s);
+            }
+        }
+
+        /*
+        std::cout << "\nvector_input: ";
+        for (int i = 0; i < vector_input.size(); i++)
+        {
+            std::cout << vector_input[i];
+
+            if (i != vector_input.size() - 1)
+            {
+                std::cout << ",";
+            }
+        }
+        std::cout << "\n";
+        */
+
+        for (int i = 0; i < vector_input.size(); i++)
+        {
+            std::string c = vector_input[i];
+
+            if ( (c >= "a" && c <= "z") || (c >= "A" && c <= "Z") || (c >= "0" && c <= "9") )
+            {
+                vector_resultado.push_back(c);
+            }
+            else if (c == "(")
+            {
+                stack.push(c);
+            }
+            else if (c == ")")
             {
                 while (stack.top()->getData() != "(")
                 {
-                    resultado += stack.top()->getData();
+                    vector_resultado.push_back(stack.top()->getData());
                     stack.pop();
                 }
 
                 stack.pop();
             }
-            else if (c == ' ')  // ocurre cuando c es un espacio
+            else if (c == " ")  // ocurre cuando c es un espacio
             {
                 continue;
             }
@@ -152,61 +178,110 @@ namespace calc
             {    
                 //char aux_top = (stack.top()->getData())[0];
                 //std::cout << "aux_top: " << aux_top << std::endl;
-                std::string aux_s(1, c);    // constructor de string que permite especificar el tamano de c, y luego c, para convertirlo a string
+                //std::string aux_s(1, c);    // constructor de string que permite especificar el tamano de c, y luego c, para convertirlo a string
                 
-                while (!stack.isEmpty() && pemdas(aux_s) <= pemdas(stack.top()->getData()) )
+                while (!stack.isEmpty() && pemdas(c) <= pemdas(stack.top()->getData()) )
                 {
-                    resultado += stack.top()->getData();
+                    vector_resultado.push_back(stack.top()->getData());
                     stack.pop();
                 }
 
-                stack.push(aux_s);
+                stack.push(c);
             }
         }
 
         while (!stack.isEmpty())
         {
-            resultado += stack.top()->getData();
+            vector_resultado.push_back(stack.top()->getData());
             stack.pop();
         }
 
-        std::vector <std::string> vector_resultado;
+        return vector_resultado;
+    }
 
-        for (int i = 0; i < resultado.length(); i++)
-        {   
-            char char_final = resultado[resultado.length()];
+    std::string Calculator::solvePostfix(std::vector <std::string> vector_postfix, std::map<std::string, int> map_variables)
+    {
+        lLists::Stack stack;
 
-            //std::cout << "[" << i << "]: " << resultado[i] << std::endl;
+        operacion ff[] = {{"+", suma},
+                          {"-", resta},
+                          {"*", mult},
+                          {"/", div},
+                          {"^", potencia}};
 
-            // NECESARIO: agregar condicion sobre: 
-            // para la siguiente expresion postfija: x,1,0,+,x,5,*,+
-            // es necesario agrupar el "x,1,0,+..." en "x,10,+...", ya que sino no hace sentido
-
-            // para ello, existen dos casos:  (el operador da lo mismo)
-            //  1.- el orden es "x,1,0,+...". 
-            //  2.- el orden es "1,0,x,+...". En este, es importante que se diga que i > 0
-
-            if (resultado[i] == 'a' && resultado[i + 1] == 'n')
+        for (int i = 0; i < vector_postfix.size(); i++)
+        {
+            if (isOperator(vector_postfix[i]))
             {
-                std::string aux_s;
-                aux_s += resultado[i];
-                aux_s += resultado[i + 1];
-                aux_s += resultado[i + 2];
+                int valor_derecho;
+                int valor_izquierdo;
 
-                vector_resultado.push_back(aux_s);
-                continue;
+                bool derecho_es_variable = false;
+                bool izquierdo_es_variable = false;
+
+                std::string operando_derecho = stack.top()->getData();
+                stack.pop();
+
+                std::cout << "operando derecho: " << operando_derecho << "\n";
+
+                std::string operando_izquierdo = stack.top()->getData(); 
+                stack.pop();
+
+                std::cout << "operando izquierdo: " << operando_izquierdo << "\n";
+
+                if (isVariable(operando_derecho))
+                {
+                    int valor_derecho = map_variables[operando_derecho];
+                    derecho_es_variable = true;
+                }
+                if (isVariable(operando_izquierdo))
+                {
+                    int valor_izquierdo = map_variables[operando_izquierdo];
+                    izquierdo_es_variable = true;
+                }
+
+                std::cout << "valor_izquierdo: " << valor_izquierdo << std::endl;
+
+                for (int j = 0; j < 4; j++)
+                {
+                    if (vector_postfix[i] == ff[j].operador)
+                    {
+
+                        if (izquierdo_es_variable && derecho_es_variable)
+                        {
+                            int resultado = ff[j].funcion(valor_izquierdo, valor_derecho);
+                            stack.push(std::to_string(resultado));
+                        }
+                        else if (!izquierdo_es_variable && derecho_es_variable)
+                        {
+                            int resultado = ff[j].funcion(stoi(operando_izquierdo), valor_derecho);
+                            stack.push(std::to_string(resultado));
+                        }
+                        else if (izquierdo_es_variable && !derecho_es_variable)
+                        {
+                            std::cout << "q wea !!!\n"; 
+
+                            int resultado = ff[j].funcion(valor_izquierdo, stoi(operando_derecho));
+                            std::cout << "resultado: " << resultado << "\n";
+                            stack.push(std::to_string(resultado));
+                        }
+                        else if (!izquierdo_es_variable && !derecho_es_variable)
+                        {
+                            int resultado = ff[j].funcion(stoi(operando_izquierdo), stoi(operando_derecho));
+                            stack.push(std::to_string(resultado));
+                        }
+
+                        break;
+                    }
+                }
             }
-            else if ( (resultado[i - 1] == 'a' && resultado[i] == 'n') || (resultado[i - 1] == 'n' && resultado[i] == 's') )
-            {
-                continue;
+
+            else {
+                stack.push(vector_postfix[i]);
             }
-
-            std::string aux_s(1, resultado[i]);
-
-            vector_resultado.push_back(aux_s);
         }
 
-        return vector_resultado;
+        return stack.top()->getData(); // solo queda un item en el stack: la respuesta de la expresion postfija !!
     }
 
     Calculator::Calculator(int ans)

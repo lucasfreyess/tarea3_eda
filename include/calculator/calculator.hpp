@@ -23,6 +23,7 @@ namespace calc
             void menu(trees::ABB &abbtree, std::map <std::string, int> &map_variables);
             void assign_value(std::string input, std::map <std::string, int> &map_variables);
             std::vector<std::string> infixToPostfix(std::string); // devuelve un vector compuesto de la expresion posfija. Es capaz de distinguir "ans"
+            std::string solvePostfix(std::vector <std::string> vector_postfix, std::map<std::string, int> map_variables);
 
             //Calculator(int ans, std::string test);
             Calculator(int ans);

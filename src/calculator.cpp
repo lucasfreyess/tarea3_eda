@@ -1,6 +1,10 @@
+/*
+ * calculator.cpp  
+ * 
+ */
+
 #include "calculator/calculator.hpp"
 #include "calculator/utils.hpp"
-#include "lLists/stack.hpp"
 #include <iostream>
 
 namespace calc
@@ -38,7 +42,7 @@ namespace calc
                 abbtree.clearAll();
 
                 trees::ABBNode* new_root = abbtree.insertPostfix(vector_postfix);
-                abbtree.insertNode(new_root);
+                abbtree.insertRoot(new_root);
 
                 map_variables["ans"] = stod(solvePostfix(vector_postfix, map_variables));  // stod: string to double
                 std::cout << "ans = " << map_variables["ans"] << "\n";
@@ -214,9 +218,6 @@ namespace calc
                         }
                         else if (izquierdo_es_variable && !derecho_es_variable)
                         {
-                            //std::cout << "\nvalor_operando_izquierdo: " << valor_izquierdo << "\n"; 
-                            //std::cout << "\nvalor_numero_derecho: " << stoi(operando_derecho) << "\n";
-
                             double resultado = ff[j].funcion(valor_izquierdo, stod(operando_derecho));
                             stack.push(std::to_string(resultado));
                         }

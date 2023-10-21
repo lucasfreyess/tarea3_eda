@@ -3,13 +3,13 @@
  *
  *  Created on: Sep 2, 2022
  *      Author: jsaavedr
+ * 
  */
 
 #include "trees/abbNode.hpp"
 
 namespace trees 
 {
-
 	ABBNode::ABBNode(): ptrLeft(nullptr), data(""), ptrRight(nullptr) 
 	{
 		// TODO Auto-generated constructor stub

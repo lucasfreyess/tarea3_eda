@@ -1,3 +1,11 @@
+/*
+ * utils.hpp 
+ * 
+ *  posee funciones de utilidad, destinadas para facilitar el calculo en solvePostfix() (calculator.cpp)
+ *  y determinar si un string es un operador, numero o variable !
+ * 
+ */
+
 #ifndef _UTILS_HPP
 #define _UTILS_HPP
 
@@ -6,8 +14,8 @@
 
 namespace calc 
 {
-    //struct de posibles operaciones para ahorrarse
-    //condiciones if en solvePostfix() de la clase calculator!!
+    // struct de posibles operaciones para ahorrarse
+    // condiciones if/else en solvePostfix()
     typedef struct operacion  
     {
         std::string operador;
@@ -23,7 +31,7 @@ namespace calc
     bool isVariable(char c);
     bool isVariable(std::string c);
 
-    int pemdas(std::string c);
+    int pemdas(std::string c);  // determina orden de operaciones (utilizado en infixToPostfix en calculator.cpp)
 
     double suma(double a, double b);
     double resta(double a, double b);

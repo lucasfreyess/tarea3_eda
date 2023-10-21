@@ -4,11 +4,15 @@ En primer lugar, se asume que se seguiran los siguientes pasos en la maquina vir
 
 ## Creacion de Makefile
 
-El archivo Makefile fue creado con el software CMake, el cual viene instalado con la VM. En el caso de que no este instalada en un entorno Ubuntu, se puede instalar con el siguiente comando en el terminal: 
+El archivo Makefile fue creado con el software CMake, el cual viene instalado con la VM. En caso de que no este instalada, se puede instalar con el siguiente comando en el terminal (en un entorno Ubuntu): 
 
 	sudo apt-get install -y install cmake
 
-Para crear el archivo Makefile con CMake, se debe ir a la carpeta "build" dentro de la carpeta "tarea-3-acevedo-reyes". Para hacer esto, se debe hacer el siguiente comando en el terminal, desde la carpeta "tarea-3-acevedo-reyes":
+Para crear el archivo Makefile con CMake, se debe ir a la carpeta "build" dentro de la carpeta "tarea-3-acevedo-reyes". Puede que "build" no exista, por lo que se tendra que crear con el siguiente comando, desde la carpeta "tarea-3-acevedo-reyes":
+
+	mkdir build
+
+Una vez creada, se debe hacer el siguiente comando en el terminal, desde la carpeta "tarea-3-acevedo-reyes":
 
 	cd build
 

@@ -4,7 +4,8 @@
  *  Created on: Sep 2, 2022
  *      Author: jsaavedr
  * 
- * 	modificado para insertar data de abbNode.hpp como string
+ * 	modificado para insertar data de abbNode.hpp como string.
+ *  ademas, se eliminaron funciones que no se utilizaron (como show_asc(), k_element() e insert())
  */
 
 #ifndef ABB_HPP_
@@ -22,30 +23,14 @@ namespace trees
 			ABBNode* root;
 
 		public:
-			void insertNode(ABBNode* node);
+			void insertRoot(ABBNode* node);
 			ABBNode* insertPostfix(std::vector <std::string> &vector_postfix);
-			void insert_rec(std::string val, ABBNode* node);
-			void insert(std::string val);
-
-			/* creo que no va a ser necesario buscar un valor dentro del arbol asi q 
-			comentare las siguientes dos funciones nomas
-
-			ABBNode* find_rec(int val, ABBNode* node);
-			ABBNode* find(int val);
-
-			*/
 
 			void traverse_rec(ABBNode* node, int level);
 			void traverse();
 
-			void showASC_rec(ABBNode* node);
-			void showASC();
-
 			void updateSize_rec(ABBNode* node);
 			void updateSize();
-
-			ABBNode* k_element_rec(int k, ABBNode* node);
-			ABBNode* k_element(int k);
 
 			void clearAll();
 

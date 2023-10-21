@@ -1,3 +1,10 @@
+/*
+ * calculator.hpp
+ *
+ *  creado para manejar las funciones relacionadas al calculo de expresiones postfijas!
+ * 
+ */
+
 #ifndef _CALCULATOR_HPP
 #define _CALCULATOR_HPP
 

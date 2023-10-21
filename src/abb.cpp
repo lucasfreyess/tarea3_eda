@@ -3,6 +3,7 @@
  *
  *  Created on: Sep 2, 2022
  *      Author: jsaavedr
+ * 
  */
 
 #include "trees/abb.hpp"
@@ -17,16 +18,17 @@ namespace trees
 		// TODO Auto-generated constructor stub
 	}
 
-	void ABB::insertNode(ABBNode* node)
+	void ABB::insertRoot(ABBNode* node)
 	{
 		root = node;
 	}
 
 	ABBNode* ABB::insertPostfix(std::vector <std::string> &vector_postfix)
 	{
-		std::stack <ABBNode*> stack;    // hubiera hecho otra clase de stack pero con data ABBNode* pero me dio demasiada lata !
+		// tratamos de implementar un stack.cpp con ABBNode*, pero no fue posible !
+		// simplemente muy dificil, por lo que decidimos utilizar std::stack!!
+		std::stack <ABBNode*> stack;
 		
-
 		for (int i = 0; i < vector_postfix.size(); i++)
 		{
 			if (calc::isOperator(vector_postfix[i]))
@@ -47,81 +49,11 @@ namespace trees
 			else   // entonces vector_postfix[i] no es un operador
 			{
 				stack.push(new ABBNode(vector_postfix[i]));
-				//std::cout << vector_postfix[i] << " pushed to stack\n\n";
 			}
 		}
 
 		return stack.top();   // queda un puntero al root del nuevo arbol binario en el stack !
 	}
-
-	void ABB::insert_rec(std::string val, ABBNode* node)
-	{
-		if (val > node->getData()) // RIGHT
-		{
-			if (node->getRight() == nullptr)
-			{
-				node->setRight(new ABBNode(val));
-				std::cout << val << " inserted on left of " << node->getData() << std::endl;
-			}
-			else {
-				insert_rec(val, node->getLeft());
-			}
-		}
-		else { // LEFT
-			
-			if (node->getLeft() == nullptr)
-			{
-				node->setLeft(new ABBNode(val));
-				std::cout << val << " inserted on right of " << node->getData() << std::endl;
-			}
-			else {
-				insert_rec(val, node->getLeft());
-			}
-		}
-	}
-
-	void ABB::insert(std::string val)
-	{
-	
-		if (root == nullptr)
-		{
-			root = new ABBNode(val);
-		}
-		else {
-			insert_rec(val, root);
-		}
-	}
-
-	/*
-	ABBNode* ABB::find_rec(int val, ABBNode* node)
-	{
-		ABBNode* ans = nullptr;
-
-		if (node->getData() == val)
-		{
-			ans = node;
-		}
-		else {
-			if (val < node->getData())
-			{
-				ans = find_rec(val, node->getLeft());
-			}
-			else {
-				ans = find_rec(val, node->getRight());
-			}
-		}
-
-		return ans;
-	}
-
-	ABBNode* ABB::find(int val) 
-	{
-		ABBNode* ans = nullptr;
-		ans = find_rec(val, root);
-
-		return ans;
-	}
-	*/
 
 	void ABB::traverse_rec(ABBNode* node, int level)
 	{
@@ -139,23 +71,6 @@ namespace trees
 	void ABB::traverse()
 	{
 		traverse_rec(root, 1);
-	}
-
-	/*extras*/
-	void ABB::showASC_rec(ABBNode* node)
-	{
-		if (node != nullptr)
-		{
-			showASC_rec(node->getLeft());
-			std::cout << node->getData() << " " << std::flush;
-			showASC_rec(node->getRight());
-		}
-	}
-
-	void ABB::showASC()
-	{
-		showASC_rec(root);
-		std::cout << std::endl;
 	}
 
 	void ABB::updateSize_rec(ABBNode* node)
@@ -184,42 +99,6 @@ namespace trees
 	void ABB::updateSize()
 	{
 		updateSize_rec(root);
-	}
-
-	ABBNode* ABB::k_element_rec(int k, ABBNode* node)
-	{
-		ABBNode* ans = nullptr;
-
-		if (node != nullptr)
-		{
-			int lSize = 0;
-			int posNode = 0;
-
-			if (node->getLeft() != nullptr)
-			{
-				lSize = node->getLeft()->getSize();
-			}
-			posNode = lSize + 1;
-
-			if (k == posNode)
-			{
-				ans = node;
-			}
-			else if (k > posNode )
-			{
-				ans = k_element_rec( k - posNode, node->getRight());
-			}
-			else {
-				ans = k_element_rec( k, node->getLeft());
-			}
-		}
-		return ans;
-
-	}
-
-	ABBNode* ABB::k_element(int k)
-	{
-		return k_element_rec(k, root);
 	}
 
 	void ABB::clearAll()

@@ -1,10 +1,10 @@
 /*
- * abbNode.h
+ * abbNode.hpp
  *
  *  Created on: Sep 2, 2022
  *      Author: jsaavedr
  * 
- * modificado para que data sea un string (en orden de poder albergar los operadores, operandos y el string "ans")
+ *  modificado para que data sea un string (en orden de poder albergar los operadores, operandos y el string "ans").
  */
 
 #ifndef ABBNODE_HPP_

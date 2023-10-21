@@ -1,7 +1,8 @@
 /*
  * node.hpp
  *
- * modificado para set-ear data como string
+ *  modificado para set-ear y get-ear data como string.
+ * 
  */
 
 #ifndef NODE_HPP_

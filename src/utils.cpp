@@ -1,3 +1,8 @@
+/*
+ * utils.cpp 
+ * 
+ */
+
 #include "calculator/utils.hpp"
 
 namespace calc
@@ -62,7 +67,7 @@ namespace calc
         return a * b;
     }
 
-    double div(double a, double b)     // hay q ver division de float !!
+    double div(double a, double b)
     {
         return a / b;
     }

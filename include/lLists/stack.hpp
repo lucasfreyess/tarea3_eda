@@ -4,7 +4,9 @@
  *  Created on: Aug 18, 2022
  *      Author: jsaavedr
  * 
- *  modificado para push-ear val como string
+ *  modificado para push-ear val como string.
+ *  ademas, el namespace no es "eda", es "lLists".
+ * 
  */
 
 #ifndef STACK_HPP_

@@ -6,7 +6,6 @@
  */
 
 #include "lLists/stack.hpp"
-#include <iostream>
 
 namespace lLists
 {

@@ -1,5 +1,6 @@
 /*
- * nodo.cpp
+ * node.cpp
+ *
  */
 
 #include "lLists/node.hpp"
